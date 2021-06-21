@@ -29,14 +29,11 @@ app.use(function (req, res, next) {
   if (token["messenger-token"]) {
     jwt.verify(token["messenger-token"], process.env.SESSION_SECRET, (err, decoded) => {
       if (err) {
-        console.log(err);
         return next();
       }
-      console.log(decoded.id);
       User.findOne({
         where: { id: decoded.id },
       }).then((user) => {
-        console.log(user);
         req.user = user;
         return next();
       });
