@@ -26,6 +26,10 @@ router.post("/register", async (req, res, next) => {
       process.env.SESSION_SECRET,
       { expiresIn: 86400 }
     );
+
+    // Send cookie in httpOnly mode with maxAge of 24 hours.
+    res.cookie('messenger-token', token, { httpOnly: true, maxAge: 1000 * 60 * 60 * 24 })
+
     res.json({
       ...user.dataValues,
       token,
@@ -64,7 +68,9 @@ router.post("/login", async (req, res, next) => {
         process.env.SESSION_SECRET,
         { expiresIn: 86400 }
       );
-      res.json({
+
+      // Send cookie in httpOnly mode with maxAge of 24 hours.
+      res.cookie('messenger-token', token, { httpOnly: true, maxAge: 1000 * 60 * 60 * 24}).json({
         ...user.dataValues,
         token,
       });
@@ -75,7 +81,8 @@ router.post("/login", async (req, res, next) => {
 });
 
 router.delete("/logout", (req, res, next) => {
-  res.sendStatus(204);
+  // Response deleting cookies value and setting 1 ms for maxAge
+  res.cookie('messenger-token', '', { maxAge: 1 }).status(204).send(); 
 });
 
 router.get("/user", (req, res, next) => {
