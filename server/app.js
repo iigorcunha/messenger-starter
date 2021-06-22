@@ -1,7 +1,5 @@
 const createError = require("http-errors");
 const express = require("express");
-const cors = require("cors");
-const cookieParser = require("cookie-parser");
 const { join } = require("path");
 const logger = require("morgan");
 const jwt = require("jsonwebtoken");
@@ -17,17 +15,14 @@ const { json, urlencoded } = express;
 const app = express();
 
 app.use(logger("dev"));
-app.use(cors());
-app.use(cookieParser())
 app.use(json());
 app.use(urlencoded({ extended: false }));
 app.use(express.static(join(__dirname, "public")));
 
 app.use(function (req, res, next) {
-  const token = req.cookies;
-
-  if (token["messenger-token"]) {
-    jwt.verify(token["messenger-token"], process.env.SESSION_SECRET, (err, decoded) => {
+  const token = req.headers["x-access-token"];
+  if (token) {
+    jwt.verify(token, process.env.SESSION_SECRET, (err, decoded) => {
       if (err) {
         return next();
       }
