@@ -13,6 +13,7 @@ router.get("/", async (req, res, next) => {
     }
     const userId = req.user.id;
     const conversations = await Conversation.findAll({
+      subQuery: false,
       where: {
         [Op.or]: {
           user1Id: userId,
@@ -20,9 +21,9 @@ router.get("/", async (req, res, next) => {
         },
       },
       attributes: ["id"],
-      order: [[Message, "createdAt", "ASC"]],
+      order: [[Message, "createdAt", "DESC"]],
       include: [
-        { model: Message, order: ["createdAt", "ASC"] },
+        { model: Message, order: ["createdAt", "DESC"] },
         {
           model: User,
           as: "user1",
@@ -67,6 +68,8 @@ router.get("/", async (req, res, next) => {
       } else {
         convoJSON.otherUser.online = false;
       }
+
+      convoJSON.messages = convoJSON.messages.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
 
       // get last message index.
       const lastMessageIndex = convoJSON.messages.length - 1;
