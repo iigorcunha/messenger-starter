@@ -19,7 +19,7 @@ router.post("/", async (req, res, next) => {
 
     // make sure if users are participating in the conversation
     if (conversation && (conversation.id !== conversationId)) {
-      return res.sendStatus(401);
+      return res.sendStatus(403);
     }
 
     // if we already know conversation id, we can save time and just add it to message and return
