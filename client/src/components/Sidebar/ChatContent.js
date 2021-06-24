@@ -1,6 +1,6 @@
 import React from "react";
-import { Box, Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { Box, Typography, Badge } from "@material-ui/core";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,14 +31,22 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 10,
-  },
+  }
 }));
+
+const StyledBadge = withStyles((theme) => ({
+  badge: {
+    top: 10,
+    right: 30,
+  }
+}))(Badge);
 
 const ChatContent = (props) => {
   const classes = useStyles();
 
-  const { conversation } = props;
+  const { conversation, unreadMessages } = props;
   const { latestMessageText, otherUser } = conversation;
+
 
   return (
     <Box className={classes.root}>
@@ -49,6 +57,9 @@ const ChatContent = (props) => {
         <Typography className={classes.previewText}>
           {latestMessageText}
         </Typography>
+      </Box>
+      <Box className={useStyles.badge}>
+        <StyledBadge badgeContent={unreadMessages} color="primary" max={999} />
       </Box>
     </Box>
   );
