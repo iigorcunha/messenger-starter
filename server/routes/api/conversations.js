@@ -13,6 +13,7 @@ router.get("/", async (req, res, next) => {
     }
     const userId = req.user.id;
     const conversations = await Conversation.findAll({
+      subQuery: false,
       where: {
         [Op.or]: {
           user1Id: userId,
@@ -68,8 +69,13 @@ router.get("/", async (req, res, next) => {
         convoJSON.otherUser.online = false;
       }
 
+      convoJSON.messages = convoJSON.messages.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+
+      // get last message index.
+      const lastMessageIndex = convoJSON.messages.length - 1;
+
       // set properties for notification count and latest message preview
-      convoJSON.latestMessageText = convoJSON.messages[0].text;
+      convoJSON.latestMessageText = convoJSON.messages[lastMessageIndex].text;
       conversations[i] = convoJSON;
     }
 
