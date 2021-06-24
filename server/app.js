@@ -22,7 +22,7 @@ app.use(urlencoded({ extended: false }));
 app.use(express.static(join(__dirname, "public")));
 
 app.use(function (req, res, next) {
-  const { messengerToken  } = req.cookies;
+  const { messengerToken } = req.cookies;
   if (messengerToken) {
     jwt.verify(messengerToken, process.env.SESSION_SECRET, (err, decoded) => {
       if (err) {
