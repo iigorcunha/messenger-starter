@@ -103,14 +103,15 @@ export const setMessagesRead = (readMessages) => async (dispatch) => {
 // message format to send: {recipientId, text, conversationId}
 // conversationId will be set to null if its a brand new conversation
 export const postMessage = (body) => async (dispatch) => {
+
   try {
     const data = await saveMessage(body);
-    console.log("postMessage", body);
+    
 
     if (!body.conversationId) {
       dispatch(addConversation(body.recipientId, data.message));
     } else {
-      dispatch(setNewMessage(data.message, body.sender, body.recipientId));
+      dispatch(setNewMessage(data.message, body.sender, body.currentUser));
     }
 
     sendMessage(data, body);
