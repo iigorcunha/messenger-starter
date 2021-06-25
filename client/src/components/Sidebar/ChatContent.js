@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Typography, Badge } from "@material-ui/core";
-import { makeStyles, withStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -13,11 +13,14 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: "bold",
     letterSpacing: -0.2,
   },
-  previewText: {
-    fontSize: 12,
-    color: "#9CADC8",
-    letterSpacing: -0.17,
-  },
+  previewText: props => (
+    {
+      fontSize: 12,
+      color: props.unreadMessages ? "" : "#9CADC8",
+      fontWeight: "bold",
+      letterSpacing: -0.17,
+    }
+  ),
   notification: {
     height: 20,
     width: 20,
@@ -31,25 +34,22 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 10,
-  }
-}));
-
-const StyledBadge = withStyles((theme) => ({
+  },
   badge: {
     top: 10,
     right: 30,
   }
-}))(Badge);
+}));
 
 const ChatContent = (props) => {
-  const classes = useStyles();
+  const classes = useStyles(props);
 
   const { conversation, unreadMessages } = props;
   const { latestMessageText, otherUser } = conversation;
 
 
   return (
-    <Box className={classes.root}>
+    <Box className={classes.root} >
       <Box>
         <Typography className={classes.username}>
           {otherUser.username}
@@ -58,8 +58,8 @@ const ChatContent = (props) => {
           {latestMessageText}
         </Typography>
       </Box>
-      <Box className={useStyles.badge}>
-        <StyledBadge badgeContent={unreadMessages} color="primary" max={999} />
+      <Box>
+        <Badge className={classes.badge} badgeContent={unreadMessages} color="primary" max={999} />
       </Box>
     </Box>
   );
