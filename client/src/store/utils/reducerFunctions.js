@@ -8,22 +8,26 @@ export const addMessageToStore = (state, payload) => {
       otherUser: sender,
       messages: [message],
     };
-    newConvo.latestMessageText = message.text;
-    if (message.senderId !== currentUser) {
+
+    if (currentUser && (message.senderId !== currentUser.id)) {
       newConvo.unreadMessages = [{ id: message.id }, ...newConvo.unreadMessages]
-    } 
+    }
+   
+
     return [newConvo, ...state];
   }
 
   return state.map((convo) => {
+    console.log("already exists Convo")
     if (convo.id === message.conversationId) {
       const convoCopy = { ...convo };
       convoCopy.messages.push(message);
       convoCopy.latestMessageText = message.text;
 
-      if (message.senderId !== currentUser) {
+      if (currentUser && (message.senderId !== currentUser.id)) {
         convoCopy.unreadMessages = [{ id: message.id }, ...convoCopy.unreadMessages]
-      } 
+      }
+
 
       return convoCopy;
     } else {
