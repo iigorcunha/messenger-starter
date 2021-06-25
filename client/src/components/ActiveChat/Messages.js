@@ -7,8 +7,7 @@ const Messages = (props) => {
   const { messages, otherUser, userId } = props;
 
   const lastReadMessage = useMemo(() => {
-    const listOfReadMessages = messages.filter(message => message.senderId === userId)
-    .filter(filteredMessage => filteredMessage.recipientRead === true)
+    const listOfReadMessages = messages.filter(message => message.senderId === userId && message.recipientRead === true)
     const lastReadMessage = listOfReadMessages[listOfReadMessages.length - 1]
 
     return lastReadMessage;

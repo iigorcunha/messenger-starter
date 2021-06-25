@@ -94,7 +94,7 @@ const sendMessage = (data, body) => {
 
 export const setMessagesRead = (readMessages) => async (dispatch) => {
   try {
-    await axios.post("/api/messages/read", readMessages);
+    await axios.patch("/api/messages/read", readMessages);
   } catch (error) {
     console.log(error);
   }
