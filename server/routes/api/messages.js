@@ -47,7 +47,7 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-router.post('/read', async (req, res) => {
+router.patch('/read', async (req, res) => {
   const messages = req.body;
 
   if ((Object.keys(messages).length > 0) && (messages.length > 0)) {
