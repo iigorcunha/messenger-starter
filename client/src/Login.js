@@ -11,51 +11,9 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { login } from "./store/utils/thunkCreators";
-import useMediaQuery from '@material-ui/core/useMediaQuery';
-import BgImage from "./assets/images/bg-img.png";
-import BubbleSvg from "./assets/images/bubble.svg";
+import { AuthLayout } from "./components/AuthLayout";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-    height: "100vh"
-  },
-  leftSide: {
-    backgroundImage: `url(${BgImage})`,
-    backgroundRepeat: 'no-repeat',
-    backgroundPosition: 'center',
-    backgroundSize: "cover",
-    width: "35%",
-  },
-  cover: {
-    background: "linear-gradient(0deg, rgba(134,185,255,1) 0%, rgba(58,141,255,1) 100%)",
-    height: "100%",
-    opacity: 0.85,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "column",
-  },
-
-  image: {
-    height: "96px",
-    marginBottom: "2rem",
-  },
-
-  title: {
-    fontFamily: "Open Sans",
-    fontSize: 36,
-    color: "#fff",
-
-  },
-
-  rightSide: {
-    flex: 1,
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    position: "relative",
-  },
   inputContainer: {
     width: "100%",
     display: "flex",
@@ -72,14 +30,14 @@ const useStyles = makeStyles((theme) => ({
     marginRight: "12rem",
     alignItems: "center",
     justifyContent: "flex-end",
-    color: "#c7c7c7"
+    color: theme.palette.grey[400]
   },
-  registerButton: {
+  registerButtonRoute: {
     marginLeft: "4rem",
     width: "12rem",
     height: "3rem",
     boxShadow: "0 2px 5px rgba(80,80,80,0.1)",
-    color: "#3A8DFF"
+    color: theme.palette.primary.main,
   },
   form: {
     width: "40%",
@@ -108,7 +66,6 @@ const Login = (props) => {
   const history = useHistory();
   const { user, login } = props;
   const classes = useStyles(props);
-  const matches = useMediaQuery('(min-width:720px)');
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -123,20 +80,10 @@ const Login = (props) => {
   }
 
   return (
-    <Box container justify="center" className={classes.root}>
-      {matches && (
-      <Box component="div" className={classes.leftSide}>
-        <Box component="div" className={classes.cover}>
-        <Box component="img" className={classes.image} src={BubbleSvg} alt="bubble chat" />
-        <Typography className={classes.title}>Converse with anyone</Typography>
-        <Typography className={classes.title}>with any language</Typography> 
-        </Box>   
-      </Box>
-      )}
-      <Box component="div" className={classes.rightSide}>
+    <AuthLayout>
         <Box component="div" className={classes.header}>
           <Typography>Don't have an account?</Typography>
-          <Button color="inherit" className={classes.registerButton} onClick={() => history.push("/register")}>Create account</Button>
+          <Button color="inherit" className={classes.registerButtonRoute} onClick={() => history.push("/register")}>Create account</Button>
         </Box>
         <Box component="form" className={classes.form} onSubmit={handleLogin}>
           <Box component="div" className={classes.titleFormContainer}>
@@ -172,8 +119,7 @@ const Login = (props) => {
                 Login
           </Button>
         </Box>
-      </Box>
-    </Box>
+    </AuthLayout>
   );
 };
 
