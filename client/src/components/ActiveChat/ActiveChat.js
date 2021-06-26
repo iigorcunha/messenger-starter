@@ -7,8 +7,8 @@ import { connect } from "react-redux";
 const useStyles = makeStyles(() => ({
   root: {
     display: "flex",
+    flexDirection: "column",
     flexGrow: 8,
-    flexDirection: "column"
   },
   chatContainer: {
     marginLeft: 41,
