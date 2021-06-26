@@ -32,7 +32,7 @@ router.get("/", async (req, res, next) => {
               [Op.not]: userId,
             },
           },
-          attributes: ["id", "username", "photoUrl"],
+          attributes: ["id", "username", "photoUrl", "socketId"],
           required: false,
         },
         {
@@ -43,7 +43,7 @@ router.get("/", async (req, res, next) => {
               [Op.not]: userId,
             },
           },
-          attributes: ["id", "username", "photoUrl"],
+          attributes: ["id", "username", "photoUrl", "socketId"],
           required: false,
         },
       ],
@@ -63,7 +63,7 @@ router.get("/", async (req, res, next) => {
       }
 
       // set property for online status of the other user
-      if (onlineUsers.includes(convoJSON.otherUser.id)) {
+      if (convoJSON.otherUser.socketId) {
         convoJSON.otherUser.online = true;
       } else {
         convoJSON.otherUser.online = false;
