@@ -32,7 +32,7 @@ router.get("/", async (req, res, next) => {
               [Op.not]: userId,
             },
           },
-          attributes: ["id", "username", "photoUrl", "socketId"],
+          attributes: ["id", "username", "photoUrl"],
           required: false,
         },
         {
@@ -43,7 +43,7 @@ router.get("/", async (req, res, next) => {
               [Op.not]: userId,
             },
           },
-          attributes: ["id", "username", "photoUrl", "socketId"],
+          attributes: ["id", "username", "photoUrl"],
           required: false,
         },
       ],
@@ -61,9 +61,9 @@ router.get("/", async (req, res, next) => {
         convoJSON.otherUser = convoJSON.user2;
         delete convoJSON.user2;
       }
-
+      
       // set property for online status of the other user
-      if (convoJSON.otherUser.socketId) {
+      if (onlineUsers.some(ou => ou.id === convoJSON.otherUser.id)) {
         convoJSON.otherUser.online = true;
       } else {
         convoJSON.otherUser.online = false;
