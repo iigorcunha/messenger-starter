@@ -1,33 +1,77 @@
-import React, { useState } from "react";
+import React from "react";
 import { Redirect, useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import {
-  Grid,
   Box,
   Typography,
   Button,
   FormControl,
   TextField,
-  FormHelperText,
 } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import { register } from "./store/utils/thunkCreators";
+import { AuthLayout } from "./components/AuthLayout";
 
-const Login = (props) => {
+const useStyles = makeStyles((theme) => ({
+  inputContainer: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    marginBottom: "4rem"
+  },
+  input: {
+    paddingTop: "1rem",
+  },
+  header: {
+    width: "100%",
+    display: "flex",
+    margin: "4rem",
+    marginRight: "12rem",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    color: theme.palette.grey[400]
+  },
+  loginButtonRoute: {
+    marginLeft: "4rem",
+    width: "12rem",
+    height: "3rem",
+    boxShadow: "0 2px 5px rgba(80,80,80,0.1)",
+    color: theme.palette.primary.main,
+  },
+  form: {
+    width: "40%",
+    flex: 1,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "column",
+  },
+  titleFormContainer: {
+    width: "100%",
+    display: "flex",
+    justifyContent: "flex-start",
+    marginBottom: "4rem",
+  },
+  titleForm: {
+    fontSize: "3rem",
+  },
+  buttonSubmit: {
+    height: "4.5rem",
+    width: "14rem",
+  }
+}));
+
+const SignUp = (props) => {
   const history = useHistory();
   const { user, register } = props;
-  const [formErrorMessage, setFormErrorMessage] = useState({});
+
+  const classes = useStyles(props);
 
   const handleRegister = async (event) => {
     event.preventDefault();
     const username = event.target.username.value;
     const email = event.target.email.value;
     const password = event.target.password.value;
-    const confirmPassword = event.target.confirmPassword.value;
-
-    if (password !== confirmPassword) {
-      setFormErrorMessage({ confirmPassword: "Passwords must match" });
-      return;
-    }
 
     await register({ username, email, password });
   };
@@ -37,73 +81,50 @@ const Login = (props) => {
   }
 
   return (
-    <Grid container justify="center">
-      <Box>
-        <Grid container item>
-          <Typography>Need to log in?</Typography>
-          <Button onClick={() => history.push("/login")}>Login</Button>
-        </Grid>
-        <form onSubmit={handleRegister}>
-          <Grid>
-            <Grid>
-              <FormControl>
+    <AuthLayout>
+      <Box component="div" className={classes.header}>
+        <Typography>Already have an account?</Typography>
+        <Button color="inherit" className={classes.loginButtonRoute} onClick={() => history.push("/login")}>Login</Button>
+      </Box>
+      <Box component="form" className={classes.form} onSubmit={handleRegister}>
+        <Box component="div" className={classes.titleFormContainer}>
+          <Typography className={classes.titleForm}>Create an account.</Typography>
+        </Box>
+        <Box component="div" className={classes.inputContainer}>
+        <FormControl margin="normal" required>
                 <TextField
+                  className={classes.input}
                   aria-label="username"
                   label="Username"
                   name="username"
                   type="text"
-                  required
                 />
-              </FormControl>
-            </Grid>
-            <Grid>
-              <FormControl>
+        </FormControl>
+          <FormControl margin="normal" required>
                 <TextField
+                  className={classes.input}
+                  aria-label="email"
                   label="E-mail address"
-                  aria-label="e-mail address"
-                  type="email"
                   name="email"
-                  required
+                  type="text"
                 />
-              </FormControl>
-            </Grid>
-            <Grid>
-              <FormControl error={!!formErrorMessage.confirmPassword}>
-                <TextField
-                  aria-label="password"
-                  label="Password"
-                  type="password"
-                  inputProps={{ minLength: 6 }}
-                  name="password"
-                  required
-                />
-                <FormHelperText>
-                  {formErrorMessage.confirmPassword}
-                </FormHelperText>
-              </FormControl>
-            </Grid>
-            <Grid>
-              <FormControl error={!!formErrorMessage.confirmPassword}>
-                <TextField
-                  label="Confirm Password"
-                  aria-label="confirm password"
-                  type="password"
-                  inputProps={{ minLength: 6 }}
-                  name="confirmPassword"
-                  required
-                />
-                <FormHelperText>
-                  {formErrorMessage.confirmPassword}
-                </FormHelperText>
-              </FormControl>
-            </Grid>
-            <Button type="submit" variant="contained" size="large">
-              Create
-            </Button>
-          </Grid>
-        </form>
+        </FormControl>
+        <FormControl margin="normal" required>
+              <TextField
+                className={classes.input}
+                label="Password"
+                aria-label="password"
+                fullWidth
+                type="password"
+                name="password"
+              />
+            </FormControl>
+        </Box>
+        <Button color="primary" className={classes.buttonSubmit} type="submit" variant="contained" size="large">
+              Login
+        </Button>
       </Box>
-    </Grid>
+  </AuthLayout>
   );
 };
 
@@ -121,4 +142,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(SignUp);
