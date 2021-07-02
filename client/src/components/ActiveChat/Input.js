@@ -39,6 +39,7 @@ class Input extends Component {
       recipientId: this.props.otherUser.id,
       conversationId: this.props.conversationId,
       sender: this.props.conversationId ? null : this.props.user,
+      currentUser: this.props.user,
     };
     await this.props.postMessage(reqBody);
     this.setState({
@@ -50,7 +51,7 @@ class Input extends Component {
     const { classes } = this.props;
     return (
       <form className={classes.root} onSubmit={this.handleSubmit}>
-        <FormControl fullWidth hiddenLabel>
+        <FormControl fullWidth hiddenLabel>   
           <FilledInput
             classes={{ root: classes.input }}
             disableUnderline

@@ -68,6 +68,10 @@ router.get("/", async (req, res, next) => {
       } else {
         convoJSON.otherUser.online = false;
       }
+      convoJSON.messages = convoJSON.messages.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+
+      // get last message index.
+      const lastMessageIndex = convoJSON.messages.length - 1;
 
       convoJSON.messages = convoJSON.messages.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
 
@@ -76,6 +80,14 @@ router.get("/", async (req, res, next) => {
 
       // set properties for notification count and latest message preview
       convoJSON.latestMessageText = convoJSON.messages[lastMessageIndex].text;
+      convoJSON.unreadMessages = convoJSON.messages
+        .filter(message => message.senderId !== userId && message.recipientRead === false)
+        .map(unreadMessage => {
+          return {
+            id: unreadMessage.id,
+          }
+        });
+      
       conversations[i] = convoJSON;
     }
 

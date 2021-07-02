@@ -24,7 +24,7 @@ router.post("/", async (req, res, next) => {
 
     // if we already know conversation id, we can save time and just add it to message and return
     if (conversationId) {
-      const message = await Message.create({ senderId, text, conversationId });
+      const message = await Message.create({ senderId, text, conversationId, recipientRead: false });
       return res.json({ message, sender });
     }
 
@@ -42,11 +42,34 @@ router.post("/", async (req, res, next) => {
       senderId,
       text,
       conversationId: conversation.id,
+      recipientRead: false,
     });
+
+
+
     res.json({ message, sender });
   } catch (error) {
     next(error);
   }
 });
+
+router.patch('/read', async (req, res) => {
+  const messages = req.body;
+
+  if ((Object.keys(messages).length > 0) && (messages.length > 0)) {
+    await messages.map(async message => {
+      const updatedMessage = {
+        id: message.id,
+        recipientRead: true,
+      }
+  
+      await Message.update(updatedMessage, {
+        where: {
+          id: message.id
+        }
+      })
+    })
+  }
+})
 
 module.exports = router;
