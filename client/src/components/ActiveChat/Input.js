@@ -13,7 +13,6 @@ const styles = {
     height: 70,
     backgroundColor: "#F4F6FA",
     borderRadius: 8,
-    marginBottom: 20,
   },
 };
 

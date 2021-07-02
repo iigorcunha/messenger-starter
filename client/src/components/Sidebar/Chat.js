@@ -39,8 +39,6 @@ const Chat = (props) => {
       })
       setMessagesRead(readMessages);
     }
-    
-  };
 
   
 
