@@ -21,15 +21,33 @@ const Messages = (props) => {
   const { messages, otherUser, userId } = props;
   const classes = useStyles();
 
+  const lastReadMessage = useMemo(() => {
+    const listOfReadMessages = messages.filter(message => message.senderId === userId && message.recipientRead === true)
+    const lastReadMessage = listOfReadMessages[listOfReadMessages.length - 1]
+
+    return lastReadMessage;
+  } , [messages, userId])
+
   return (
     <Box className={classes.messageContainer}>
       {messages.map((message) => {
         const time = moment(message.createdAt).format("h:mm");
 
         return message.senderId === userId ? (
-          <SenderBubble key={message.id} text={message.text} time={time} />
+          <SenderBubble 
+            key={message.id} 
+            text={message.text}
+            time={time}
+            otherUser={otherUser}  
+            lastReadMessage={lastReadMessage && lastReadMessage.id === message.id} />
+            
         ) : (
-          <OtherUserBubble key={message.id} text={message.text} time={time} otherUser={otherUser} />
+          <OtherUserBubble 
+            key={message.id} 
+            text={message.text} 
+            time={time}
+            otherUser={otherUser} 
+            />
         );
       })}
     </Box>

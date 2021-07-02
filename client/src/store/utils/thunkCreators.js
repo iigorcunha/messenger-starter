@@ -15,9 +15,8 @@ export const fetchUser = () => async (dispatch) => {
   try {
     const { data } = await axios.get("/auth/user");
     dispatch(gotUser(data));
-    if (data.id) {
-      socket.emit("go-online", data.id);
-    }
+    socket.emit("go-online", data.id);
+    
   } catch (error) {
     console.error(error);
   } finally {
@@ -81,18 +80,27 @@ const sendMessage = (data, body) => {
   });
 };
 
+
+export const setMessagesRead = (readMessages) => async (dispatch) => {
+  try {
+    await axios.patch("/api/messages/read", readMessages);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 // message format to send: {recipientId, text, conversationId}
 // conversationId will be set to null if its a brand new conversation
 export const postMessage = (body) => async (dispatch) => {
   try {
-
     const data = await saveMessage(body);
-   
-      if (!body.conversationId) {
-        dispatch(addConversation(body.recipientId, data.message));
-      } else {
-        dispatch(setNewMessage(data.message, body.sender));
-      }
+    
+
+    if (!body.conversationId) {
+      dispatch(addConversation(body.recipientId, data.message));
+    } else {
+      dispatch(setNewMessage(data.message, body.sender, body.currentUser));
+    }
   
     sendMessage(data, body);
 
