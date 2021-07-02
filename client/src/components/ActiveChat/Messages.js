@@ -21,7 +21,7 @@ const Messages = (props) => {
   const { messages, otherUser, userId } = props;
   const classes = useStyles();
 
-  const lastReadMessage = useMemo(() => {
+  const lastReadMessage = React.useMemo(() => {
     const listOfReadMessages = messages.filter(message => message.senderId === userId && message.recipientRead === true)
     const lastReadMessage = listOfReadMessages[listOfReadMessages.length - 1]
 

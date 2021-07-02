@@ -39,6 +39,7 @@ const Chat = (props) => {
       })
       setMessagesRead(readMessages);
     }
+  }
 
   
 
@@ -68,6 +69,6 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(setMessagesRead(message));
     },
   };
-};
+}
 
 export default connect(null, mapDispatchToProps)(withStyles(styles)(Chat));

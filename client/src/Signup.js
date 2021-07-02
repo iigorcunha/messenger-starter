@@ -121,7 +121,7 @@ const SignUp = (props) => {
             </FormControl>
         </Box>
         <Button color="primary" className={classes.buttonSubmit} type="submit" variant="contained" size="large">
-              Login
+              Create
         </Button>
       </Box>
   </AuthLayout>

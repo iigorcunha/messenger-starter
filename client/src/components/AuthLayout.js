@@ -54,11 +54,11 @@ const useStyles = makeStyles((theme) => ({
 export const AuthLayout = ({children}) => {
   const classes = useStyles();
   return (
-  <Box container justify="center" className={classes.root}>
+  <Box justify="center" className={classes.root}>
   <Box component="div" className={classes.leftSide}>
     <Box component="div" className={classes.cover}>
     <Box component="img" className={classes.chatBubbleImg} src={BubbleSvg} alt="bubble chat" />
-    <Typography color="text.primary" className={classes.title}>Converse with anyone</Typography>
+    <Typography color="textPrimary" className={classes.title}>Converse with anyone</Typography>
     <Typography className={classes.title}>with any language</Typography> 
     </Box>   
   </Box>

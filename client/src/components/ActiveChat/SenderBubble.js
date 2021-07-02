@@ -36,6 +36,7 @@ const SenderBubble = (props) => {
   const { time, text, lastReadMessage, otherUser } = props;
   return (
     <Box className={classes.root}>
+      {console.log(props)}
       <Typography className={classes.date}>{time}</Typography>
       <Box className={classes.bubble}>
         <Typography className={classes.text}>{text}</Typography>
