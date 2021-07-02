@@ -73,11 +73,6 @@ router.get("/", async (req, res, next) => {
       // get last message index.
       const lastMessageIndex = convoJSON.messages.length - 1;
 
-      convoJSON.messages = convoJSON.messages.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
-
-      // get last message index.
-      const lastMessageIndex = convoJSON.messages.length - 1;
-
       // set properties for notification count and latest message preview
       convoJSON.latestMessageText = convoJSON.messages[lastMessageIndex].text;
       convoJSON.unreadMessages = convoJSON.messages
