@@ -23,12 +23,9 @@ export const addMessageToStore = (state, payload) => {
       const convoCopy = { ...convo };
       convoCopy.messages.push(message);
       convoCopy.latestMessageText = message.text;
-
       if (currentUser && (message.senderId !== currentUser.id)) {
         convoCopy.unreadMessages = [{ id: message.id }, ...convoCopy.unreadMessages]
       }
-
-
       return convoCopy;
     } else {
       return convo;
@@ -36,29 +33,19 @@ export const addMessageToStore = (state, payload) => {
   });
 };
 
-export const addOnlineUserToStore = (state, id) => {
+export const updateStatusUserToStore = (state, sessions) => {
   return state.map((convo) => {
-    if (convo.otherUser.id === id) {
+    if (sessions.some( session => session.id === convo.otherUser.id)) {
       const convoCopy = { ...convo };
-      convoCopy.otherUser.online = true;
-      return convoCopy;
+        convoCopy.otherUser.online = true;
+        return convoCopy;
     } else {
-      return convo;
+      const convoCopy = { ...convo };
+        convoCopy.otherUser.online = false;
+        return convoCopy;
     }
   });
-};
-
-export const removeOfflineUserFromStore = (state, id) => {
-  return state.map((convo) => {
-    if (convo.otherUser.id === id) {
-      const convoCopy = { ...convo };
-      convoCopy.otherUser.online = false;
-      return convoCopy;
-    } else {
-      return convo;
-    }
-  });
-};
+}
 
 export const addSearchedUsersToStore = (state, users) => {
   const currentUsers = {};

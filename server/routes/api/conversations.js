@@ -13,6 +13,7 @@ router.get("/", async (req, res, next) => {
     }
     const userId = req.user.id;
     const conversations = await Conversation.findAll({
+      subQuery: false,
       where: {
         [Op.or]: {
           user1Id: userId,
@@ -60,13 +61,18 @@ router.get("/", async (req, res, next) => {
         convoJSON.otherUser = convoJSON.user2;
         delete convoJSON.user2;
       }
-
+      
       // set property for online status of the other user
-      if (onlineUsers.includes(convoJSON.otherUser.id)) {
+      if (onlineUsers.some(ou => ou.id === convoJSON.otherUser.id)) {
         convoJSON.otherUser.online = true;
       } else {
         convoJSON.otherUser.online = false;
       }
+      convoJSON.messages = convoJSON.messages.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+
+      // get last message index.
+      const lastMessageIndex = convoJSON.messages.length - 1;
+
       convoJSON.messages = convoJSON.messages.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
 
       // get last message index.

@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const { v4: uuidV4} = require("uuid");
 const { User } = require("../../db/models");
 const jwt = require("jsonwebtoken");
 
@@ -22,13 +23,12 @@ router.post("/register", async (req, res, next) => {
     const user = await User.create(req.body);
 
     const token = jwt.sign(
-      { id: user.dataValues.id },
+      { id: user.dataValues.id, sessionId: uuidV4() },
       process.env.SESSION_SECRET,
       { expiresIn: 86400 }
     );
-    res.json({
+    res.cookie("messengerToken", token, { httpOnly: true, maxAge: 1000 * 60 * 60 * 24 }).json({
       ...user.dataValues,
-      token,
     });
   } catch (error) {
     if (error.name === "SequelizeUniqueConstraintError") {
@@ -60,13 +60,12 @@ router.post("/login", async (req, res, next) => {
       res.status(401).json({ error: "Wrong username and/or password" });
     } else {
       const token = jwt.sign(
-        { id: user.dataValues.id },
+        { id: user.dataValues.id, sessionId: uuidV4() },
         process.env.SESSION_SECRET,
         { expiresIn: 86400 }
       );
-      res.json({
+      res.cookie("messengerToken", token, { httpOnly: true, maxAge: 1000 * 60 * 60 * 24 }).json({
         ...user.dataValues,
-        token,
       });
     }
   } catch (error) {
@@ -75,7 +74,7 @@ router.post("/login", async (req, res, next) => {
 });
 
 router.delete("/logout", (req, res, next) => {
-  res.sendStatus(204);
+  res.clearCookie("messengerToken").sendStatus(204);
 });
 
 router.get("/user", (req, res, next) => {
